@@ -1,0 +1,393 @@
+{
+	"info": {
+		"_postman_id": "bc36ed4e-b94c-49d6-9d2d-62b28ec27262",
+		"name": "Simple Tool Api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33541680"
+	},
+	"item": [
+		{
+			"name": "registertoken",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "7346161e12b937a12e780a7cc52db8b119863631513ed449db2f7d4e78c440c9",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"clientName\": \"Aditya kumar\",\r\n   \"clientEmail\": \"adityaspn556@example.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://simple-tool-rental-api.glitch.me/api-clients",
+					"protocol": "https",
+					"host": [
+						"simple-tool-rental-api",
+						"glitch",
+						"me"
+					],
+					"path": [
+						"api-clients"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "alltools",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://simple-tool-rental-api.glitch.me/tools",
+					"protocol": "https",
+					"host": [
+						"simple-tool-rental-api",
+						"glitch",
+						"me"
+					],
+					"path": [
+						"tools"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "singleCreateOrder",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"  const status = pm.response.status;\r",
+							"  const statusCode =pm.response.code\r",
+							"  pm.expect(statusCode).equal(201);\r",
+							"  pm.expect(status).equal('Created');// check status\r",
+							"});\r",
+							"\r",
+							"pm.test(\"test response\",function(){\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson).not.equal(null);// responses is not empty\r",
+							"    pm.expect(responseJson).to.be.an(\"Object\");// check data type \r",
+							"    pm.expect(responseJson.created).equal(true);\r",
+							"    pm.expect(responseJson.orderId).not.equal(null);  \r",
+							"    pm.environment.set( \"orderId\" , responseJson.orderId);  \r",
+							"})\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "7346161e12b937a12e780a7cc52db8b119863631513ed449db2f7d4e78c440c9",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n \"toolId\": 4643,\r\n \"customerName\": \"Aditya kumar\",\r\n \"comment\" : \"this is tool--post request\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/orders",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "singleorder",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  const status = pm.response.status;\r",
+							"  const statusCode =pm.response.code\r",
+							"  pm.expect(statusCode).equal(200);\r",
+							"  // check status\r",
+							"});\r",
+							"// Check if the response contains the customerName \"Aditya kumar\"\r",
+							" pm.expect(responseBody).to.not.be.null;\r",
+							"\r",
+							"// Check if the response contains the correct quantity\r",
+							"pm.test(\"Response should contain the correct quantity\", function () {\r",
+							"    pm.expect(pm.response.json().quantity).to.eql(1);\r",
+							"});\r",
+							"// Check if the response contains the correct comment\r",
+							"pm.test(\"Response should contain the correct comment\", function () {\r",
+							"    pm.expect(pm.response.json().comment).to.eql(\"this is tool--post request\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"// Check if the 'processed' field is false in the response\r",
+							"pm.test(\"Processed field should be false\", function () {\r",
+							"    pm.expect(pm.response.json().processed).to.be.false;\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "7346161e12b937a12e780a7cc52db8b119863631513ed449db2f7d4e78c440c9",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/orders/{{orderId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"orders",
+						"{{orderId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getordersbytoken",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							" // pm.response.to.have.status(200);\r",
+							" const status = pm.response.status;\r",
+							"  pm.expect(status).equal('OK');// check status\r",
+							"  const responseJson = pm.response.json();\r",
+							"  pm.expect(responseJson).not.equal(null);// responses is not empty\r",
+							"  pm.expect(responseJson).to.be.an(\"Array\");// check data type \r",
+							" // pm.expect(responseJson.length).equal(0);// in the response array size is 0;\r",
+							"  //pm.expect(2).to.eql(2);\r",
+							"  //pm.expect(responseJson.status).to.eql(\"UP\");//body ko check krne ke liy\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "7346161e12b937a12e780a7cc52db8b119863631513ed449db2f7d4e78c440c9",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://simple-tool-rental-api.glitch.me/orders",
+					"protocol": "https",
+					"host": [
+						"simple-tool-rental-api",
+						"glitch",
+						"me"
+					],
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Check if the response status code is 204\r",
+							"pm.test(\"Status code is 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"//Check if the response contains the updated customerName\r",
+							"pm.test(\"Response should contain the updated customerName\", function () {\r",
+							"    pm.expect(responseBody).to.not.be.null;\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "7346161e12b937a12e780a7cc52db8b119863631513ed449db2f7d4e78c440c9",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n \"toolId\": 4643,\r\n \"customerName\": \"kumar\",\r\n \"comment\" : \"this is tool--post request\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/orders/{{orderId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"orders",
+						"{{orderId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "singleorder Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "7346161e12b937a12e780a7cc52db8b119863631513ed449db2f7d4e78c440c9",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/orders/{{orderId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"orders",
+						"{{orderId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// pm.test(\"Status code is 204\", function () {\r",
+							"//     pm.response.to.have.status(204);\r",
+							"// });"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/orders/{{orderId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"orders",
+						"{{orderId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
